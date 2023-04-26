@@ -24,12 +24,17 @@ jobs:
       uses: docker/setup-buildx-action@v1
 
     - name: Install and configure AWS CLI
+      env:
+        KUBECONFIG_DATA: ${{ secrets.KUBECONFIG_FILE_CONTENTS }}
       run: |
+        echo "$KUBECONFIG_DATA" > kubeconfig.yaml
+        export KUBECONFIG=kubeconfig.yaml
+
         aws --version
         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws configure set default.region $AWS_REGION
-        aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME --kubeconfig ${{ env.KUBECONFIG_FILE }}
+        aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME 
 
     - name: Login to Amazon ECR
       id: login-ecr
