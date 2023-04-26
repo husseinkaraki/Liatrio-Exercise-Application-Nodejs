@@ -48,17 +48,15 @@ jobs:
         tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY_NAME }}:${{ github.sha }}
     
     - name: Set up kubeconfig
-      env:
-        KUBECONFIG_DATA: ${{ secrets.KUBECONFIG_FILE_CONTENTS }}
       run: |
-        echo "$KUBECONFIG_DATA" > kubeconfig.yaml
-          export KUBECONFIG=kubeconfig.yaml
+        echo "${{ secrets.KUBECONFIG_FILE_CONTENTS }}" > kubeconfig.yaml
+        export KUBECONFIG=kubeconfig.yaml
 
     - name: Deploy to Amazon EKS
       run: |
-        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/deployment.yaml --kubeconfig=kubeconfig.yaml
+        echo "$GITHUB_CONTEXT"
         echo "kubectl set image deployment $K8S_DEPLOYMENT_NAME liatrio-exercist-container=${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY_NAME:${{ github.sha }} -n $K8S_NAMESPACE"
-
         kubectl set image deployment $K8S_DEPLOYMENT_NAME liatrio-exercist-container=${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY_NAME:${{ github.sha }} -n $K8S_NAMESPACE
         kubectl rollout status deployment/$K8S_DEPLOYMENT_NAME -n $K8S_NAMESPACE
       
