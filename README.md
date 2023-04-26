@@ -8,6 +8,8 @@
 ## Run the App
 `npm start dev`
 
+
+
 ## Docker
 
 To build the image `docker build -t liatrio:v1 .`

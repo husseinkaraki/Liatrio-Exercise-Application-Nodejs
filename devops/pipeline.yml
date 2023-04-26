@@ -1,1 +1,58 @@
-Test
+name: Deploy to AWS EKS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    env:
+      AWS_REGION: us-east-1
+      K8S_NAMESPACE: liatrio2-main-ns
+      K8S_DEPLOYMENT_NAME: your-k8s-deployment-name
+      ECR_REPOSITORY: liatrio-exercise-repo
+      EKS_CLUSTER_NAME: liatrio2
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY_NAME }}:${{ github.sha }}
+    
+    - name: Set up kubeconfig
+        env:
+          KUBECONFIG_DATA: ${{ secrets.KUBECONFIG_FILE_CONTENTS }}
+        run: |
+          echo "$KUBECONFIG_DATA" > kubeconfig.yaml
+          export KUBECONFIG=kubeconfig.yaml
+
+    - name: Install and configure AWS CLI
+      run: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install
+        aws --version
+        aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME --kubeconfig ${{ env.KUBECONFIG_FILE }}
+
+    - name: Deploy to Amazon EKS
+      run: |
+        kubectl apply -f k8s/deployment.yaml
+        kubectl set image deployment/$K8S_DEPLOYMENT_NAME your-container-name=${{ steps.login-ecr.outputs.registry }}/your-ecr-repository:${{ github.sha }} -n $K8S_NAMESPACE
+        kubectl rollout status deployment/$K8S_DEPLOYMENT_NAME -n $K8S_NAMESPACE
+      
+       

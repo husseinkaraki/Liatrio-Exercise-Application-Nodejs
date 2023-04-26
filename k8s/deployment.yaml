@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: liatrio-exercist-service
+  namespace: liatrio2-main-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: liatrio-exercist-app
+  template:
+    metadata:
+      labels:
+        app: liatrio-exercist-app
+    spec:
+      containers:
+      - name: liatrio-exercist-container
+        image: placeholder-image:placeholder-tag
+        ports:
+        - containerPort: 8080
