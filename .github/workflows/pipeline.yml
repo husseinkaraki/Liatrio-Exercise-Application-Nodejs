@@ -13,7 +13,7 @@ jobs:
       AWS_REGION: us-east-1
       K8S_NAMESPACE: liatrio2-main-ns
       K8S_DEPLOYMENT_NAME: your-k8s-deployment-name
-      ECR_REPOSITORY: liatrio-exercise-repo
+      ECR_REPOSITORY_NAME: liatrio-exercise-repo
       EKS_CLUSTER_NAME: liatrio2
     
     steps:
