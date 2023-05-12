@@ -11,10 +11,10 @@ jobs:
     
     env:
       AWS_REGION: us-east-1
-      K8S_NAMESPACE: liatrio2-main-ns
+      K8S_NAMESPACE: liatrio-main-ns
       K8S_DEPLOYMENT_NAME: liatrio-exercist-service
       ECR_REPOSITORY_NAME: liatrio-exercise-repo
-      EKS_CLUSTER_NAME: liatrio2
+      EKS_CLUSTER_NAME: liatrio-eks-prod
     
     steps:
     - name: Checkout code
