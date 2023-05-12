@@ -55,7 +55,7 @@ jobs:
     - name: Deploy to Amazon EKS
       run: |
         export KUBECONFIG=kubeconfig.yaml
-        kubectl apply -f k8s/deployment.yaml --v=9
+        kubectl apply -f k8s/kustomization.yaml --v=9
 
         echo "$GITHUB_CONTEXT"
         echo "kubectl set image deployment $K8S_DEPLOYMENT_NAME liatrio-exercist-container=${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY_NAME:${{ github.sha }} -n $K8S_NAMESPACE --v=9"
