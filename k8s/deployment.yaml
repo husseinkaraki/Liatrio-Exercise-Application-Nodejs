@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: liatrio-exercist-service
+      app: liatrio-exercist-app
   template:
     metadata:
       labels:
-        app: liatrio-exercist-service
+        app: liatrio-exercist-app
     spec:
       containers:
       - name: liatrio-exercist-container

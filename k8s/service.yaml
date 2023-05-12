@@ -4,7 +4,7 @@ metadata:
   name: liatrio-exercist-service
   namespace: liatrio-main-ns
   labels:
-    app: liatrio-exercist-service
+    app: liatrio-exercist-app
 spec:
   type: LoadBalancer
   ports:
@@ -12,5 +12,4 @@ spec:
       port: 80
       targetPort: 8080
   selector:
-      app: liatrio-exercist-service  
-2
+    app: liatrio-exercist-app
