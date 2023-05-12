@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: liatrio-exercist-service
-  namespace: liatrio-main-ns
 spec:
   replicas: 1
   selector:
