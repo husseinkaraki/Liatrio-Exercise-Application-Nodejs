@@ -13,7 +13,7 @@ spec:
         app: liatrio-exercist-service
     spec:
       containers:
-      - name: liatrio-exercist-service
+      - name: liatrio-exercist-container
         image: placeholder-image:placeholder-tag
         ports:
         - containerPort: 8080
